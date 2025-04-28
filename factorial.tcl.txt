@@ -1,0 +1,18 @@
+# Accept a number from the user
+puts -nonewline "Enter a number: "
+flush stdout
+gets stdin num
+
+# Initialize factorial to 1
+set fact 1
+
+# Check if the number is greater than or equal to 0
+if {$num >= 0} {
+    # Loop from 1 to the number
+    for {set i 1} {$i <= $num} {incr i} {
+        set fact [expr {$fact * $i}]
+    }
+    puts "Factorial of $num is: $fact"
+} else {
+    puts "Factorial is not defined for negative numbers."
+}

@@ -1,0 +1,20 @@
+# Open the input file for reading
+set infile [open "input.txt" r]
+
+# Read the entire content from the file
+set content [read $infile]
+
+# Close the input file
+close $infile
+
+# Open the output file for writing
+set outfile [open "output.txt" w]
+
+# Write the content two times into the output file
+puts $outfile $content
+puts $outfile $content
+
+# Close the output file
+close $outfile
+
+puts "Content has been written two times into output.txt"

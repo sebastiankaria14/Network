@@ -1,0 +1,48 @@
+# Create a simulator object
+set ns [new Simulator]
+
+# Open a trace file
+set tracefile [open out.tr w]
+$ns trace-all $tracefile
+
+# Create two nodes
+set n0 [$ns node]
+set n1 [$ns node]
+
+# Create a duplex link between the two nodes
+$ns duplex-link $n0 $n1 1Mb 10ms DropTail
+
+# Create TCP agent and attach it to node n0
+set tcp [new Agent/TCP]
+$ns attach-agent $n0 $tcp
+
+# Create TCP sink agent and attach it to node n1
+set sink [new Agent/TCPSink]
+$ns attach-agent $n1 $sink
+
+# Connect TCP agent with TCP sink
+$ns connect $tcp $sink
+
+# Create a CBR application and attach it to TCP agent
+set cbr [new Application/Traffic/CBR]
+$cbr attach-agent $tcp
+$cbr set packetSize_ 1000
+$cbr set interval_ 0.01
+
+# Schedule the CBR to start and stop
+$ns at 0.5 "$cbr start"
+$ns at 4.5 "$cbr stop"
+
+# Define a 'finish' procedure
+proc finish {} {
+    global ns tracefile
+    $ns flush-trace
+    close $tracefile
+    exit 0
+}
+
+# Call 'finish' at the end of the simulation
+$ns at 5.0 "finish"
+
+# Run the simulation
+$ns run
